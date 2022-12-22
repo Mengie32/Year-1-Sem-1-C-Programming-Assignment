@@ -1,6 +1,6 @@
 #include "Definitions.h"
 
-extern char puzzle[ROWS][COLUMNS];
+//extern char puzzle[height][width];
 extern char dictionary[][10];
 extern int dictSize;
 extern char wordBank[WORDSTOCHOOSE][10];
@@ -26,17 +26,11 @@ void getRandomWords() // This code can generate duplicate words -- try to fix it
 }
 */
 
-void createBlankPuzzle()
-{
-    int i, j;
-
-    for (i = 0; i < ROWS; i++)
-    {
-        for (j = 0; j < COLUMNS; j++)
-        {
-            puzzle[i][j] = '@';
-        }
-    }
+void createBlankPuzzle(){
+    char filler = '@';
+    area = width * height;
+    puzzleArray = malloc(area);
+    memset(puzzleArray, '@', area);
 }
 
 void displayPuzzle()
@@ -47,19 +41,19 @@ void displayPuzzle()
 
     // First display column names
     printf(CLRSCREEN CURSORHOME HIGHLIGHT"     ");
-    for (i = 0; i < COLUMNS; i++)
+    for (i = 0; i < width; i++)
     {
         printf("%c ", 'A' + i);
     }
     printf(RESET"\n"HIGHLIGHT"  \n"RESET);
 
-    for (i = 0; i < ROWS; i++)
+    for (i = 0; i < height; i++)
     {
         printf(HIGHLIGHT"%2d"RESET"   ", rowNum+1);
         rowNum++;
-        for (j = 0; j < COLUMNS; j++)
+        for (j = 0; j < width; j++)
         {
-            letter = puzzle[i][j];
+            letter = *puzzleInterface(i,j);
             highlight = getBit(letter, 5);
 
             printf(highlight ? GRNBACK"%c "RESET : "%c ", (letter & ~(1 << 5)));
@@ -96,16 +90,16 @@ int getValidArea(int* maxColumn, int* maxRow, int orientation, int wordLen) {
     switch (orientation)
     {
     case 0: //Horizontal
-        *maxColumn = 1 + COLUMNS - wordLen; // + 1 added due to rand() % max returning a value between 0 & max-1
-        *maxRow = ROWS;
+        *maxColumn = 1 + width - wordLen; // + 1 added due to rand() % max returning a value between 0 & max-1
+        *maxRow = height;
         break;
     case 1: //Diagonal
-        *maxColumn = 1 + COLUMNS - wordLen;
-        *maxRow = 1 + ROWS - wordLen;
+        *maxColumn = 1 + width - wordLen;
+        *maxRow = 1 + height - wordLen;
         break;
     case 2: //Vertical
-        *maxColumn = COLUMNS;
-        *maxRow = 1 + ROWS - wordLen;
+        *maxColumn = width;
+        *maxRow = 1 + height - wordLen;
         break;
     }
 
@@ -127,7 +121,7 @@ int collisionTest(char word[10], int column, int row, int orientation) {
     int y = *offsets, x = *(offsets + 1);
     
     for (i = 0; i < strlen(word); i++) {
-        letter = puzzle[row + i*y][column + i*x];
+        letter = *puzzleInterface(row + i * y, column + i * x);
         //printf("\nCollision Test: testing (%i,%i). Value is %c", column + i * x, row + i * y, letter);
         if (letter == '@' || letter == word[i]) {
             continue;
@@ -172,7 +166,7 @@ int putWord(int index, int orientation) {
     //printf("\nTests succeded, writing word %s", word);
 
     for (i = 0; i < strlen(word); i++) {// if all previos steps succeded, write the word into the chosen area
-        puzzle[startRow + i*y][startColumn + i*x] = word[i];
+        *puzzleInterface(startRow + i * y, startColumn + i * x) = word[i];
     }
 
     logWord(&wordBank, word); // log the word into wordBank once it's been succesfully written
@@ -190,11 +184,11 @@ void putHorizontalWord(char word[10])
     do
     {
 
-        rRow = rand() % ROWS;
-        rCol = rand() % COLUMNS;
+        rRow = rand() % height;
+        rCol = rand() % width;
 
         ok = 1;
-        if (rCol + strlen(word) < COLUMNS) // if word fits in chosen ranom Column
+        if (rCol + strlen(word) < width) // if word fits in chosen ranom Column
         {
             for (i = 0; i < strlen(word); i++) // this code still causes words to overlap, it just stops writing a word once it collides with another word
             {                                  // check should be done before writing begins
@@ -240,10 +234,10 @@ void fillPuzzleWithWords()
 void fillRandom(void) {
     int i,j;
 
-    for (i = 0; i < ROWS; i++) {
-        for (j = 0; j < COLUMNS; j++) {
-            if (puzzle[i][j] == '@') {
-                puzzle[i][j] = 65 + rand() % 26;
+    for (i = 0; i < height; i++) {
+        for (j = 0; j < width; j++) {
+            if (*puzzleInterface(i,j) == '@') {
+                *puzzleInterface(i, j) = 65 + rand() % 26;
             }
         }
     }

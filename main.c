@@ -26,8 +26,7 @@
 #include "Definitions.h"
 #include "Globals.h"
 
-extern char puzzle[ROWS][COLUMNS];
-
+//extern char puzzle[height][width];
 extern char dictionary[][10];
 
 extern int remainingWords;
@@ -37,8 +36,8 @@ extern time_t startTime;
 void newPuzzle() {
     found = 0;
     createBlankPuzzle();
-    fillPuzzleWithWords();
-    fillRandom();
+    //fillPuzzleWithWords();
+    //fillRandom();
     remainingWords = wordBankSize;
 }
 
@@ -47,7 +46,7 @@ void game() {
 
     //remainingWords = 0; //used for testing post-game
     while (remainingWords) {
-        setCursorPos(ansField);
+        walkCursor(2,-11);
         printf(CLEARFIELD); // erase previous answer
         switch (acceptAnswer())
         {

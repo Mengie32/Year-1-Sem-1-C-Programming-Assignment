@@ -1,13 +1,13 @@
 #include "Definitions.h"
 
-extern char puzzle[ROWS][COLUMNS];
+//extern char puzzle[height][width];
 extern char dictionary[][10];
 extern int dictSize;
 extern int wordBankSize;
 extern char wordBank[WORDSTOCHOOSE][10];
 extern int found;
-extern int wordBankField[2];
-extern int remainingWords;
+//extern int wordBankField[2];
+//extern int remainingWords;
 
 // shifts the array forward, and logs the given word into the array at index 0
 void logWord(char* array, char word[10]) {
@@ -29,7 +29,7 @@ void getWordBankSize() {
 
 void displayWordBank() {
 	int i;
-	setCursorPos(wordBankField);
+	printLine(width + 20);
 	printf("\n" CLEARFIELD "%i Words to Find : \n"CLEARFIELD, wordBankSize);
 	for (i = 0; i < WORDSTOCHOOSE; i++) {
 		//printf("\n%i: %i ",i, binaryRead(found, i));

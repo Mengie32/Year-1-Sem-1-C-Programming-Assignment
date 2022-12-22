@@ -1,10 +1,10 @@
 #include "Definitions.h"
 
-extern char puzzle[ROWS][COLUMNS];
+//extern char puzzle[height][width];
 extern char wordBank[WORDSTOCHOOSE][10];
 extern int wordBankSize;
-extern int ansField[2];
-extern int logField[2];
+//extern int ansField[2];
+//extern int logField[2];
 extern int found;
 int coord[4]; // startRow, startColumn, endRow, endColumn
 extern int* orientationToOffsets(orientation);
@@ -16,8 +16,8 @@ extern int remainingWords;
 void refresh() {
 	displayPuzzle();
 	displayWordBank();
-	printf("\nEnter Coordinates:\t\n(e.g a1 d4) Type menu to pause the fame and open the menu\n");
-	printLine(COLUMNS * 2 + 10);
+	printf("\nEnter Coordinates:\t\n(e.g a1 d4) Type menu to pause the game and open the menu\n");
+	printLine(width * 2 + 10);
 }
 
 
@@ -47,7 +47,7 @@ int  acceptAnswer() {
 	char* context;
 	gets(answer);
 	if (!answer[0]) { // prevent crash if user enters a blank answer
-		setCursorPos(logField);
+		logField();
 		printf(CLEARFIELD REDFORE"Cannot leave field blank"RESET);
 		return 0;
 	}
@@ -57,7 +57,7 @@ int  acceptAnswer() {
 		return -1;
 	}
 	if (!strchr(answer, ' ')) { // prevents crash if answer does not contain a space
-		setCursorPos(logField);
+		logField();
 		printf(CLEARFIELD REDFORE"Coordinates format is <letter><number> <letter><number>"RESET);
 		return 0;
 	}
@@ -109,7 +109,7 @@ void searchBoard() {
 	char* bankWord = NULL;
 
 	if (orientation == -1) {
-		setCursorPos(logField);
+		logField();
 		printf(CLEARFIELD REDFORE"Invalid Orientation, words may be vertical, horizontal, or diagonal only."RESET);
 		return 0;
 	}
@@ -118,13 +118,13 @@ void searchBoard() {
 	i = 0;
 	do {
 		if (i >= 10) {
-			setCursorPos(logField);
+			logField();
 			printf(CLEARFIELD REDFORE"Words cannot be longer than 10 letters."RESET);
 			strcpy_s(word, 10, "");
 			return 0;
 		}
-		letter = puzzle[y][x];
-		binaryWrite(&letter, 5, 0); // remove highlight data from letter
+		letter = *puzzleInterface(y,x);
+		setBit(&letter, 5, 0); // remove highlight data from letter
 		word[i] = letter;
 		i++;
 		x += xo;
@@ -140,7 +140,7 @@ void searchBoard() {
 		bankWord = wordBank[i];
 		if (strcmp(bankWord, word) == 0) {
 			if (getBit(found, i)) {
-				setCursorPos(logField);
+				logField();
 				printf(CLEARFIELD"You already found %s.", word);
 				return 0;
 			}
@@ -150,18 +150,18 @@ void searchBoard() {
 			y = coord[1];
 			// highlihght word in puzzle
 			do {
-				binaryWrite(&puzzle[y][x],5,1);
+				setBit(puzzleInterface(y,x), 5, 1);
 				x += xo;
 				y += yo;
 			} while (!(x > coord[2] || y > coord[3]));
 			refresh();
-			setCursorPos(logField);
+			logField();
 			remainingWords--;
 			printf(CLEARFIELD GRNFORE"You Found %s!"RESET, word);
 			return 1;
 		}
 	}
-	setCursorPos(logField);
+	logField();
 	printf(CLEARFIELD REDFORE"%s is not in the word bank."RESET, word);
 	
 }
@@ -181,7 +181,7 @@ void win() {
 
 	timeToComplete += difftime(time(NULL), startTime);
 	printf("You completed a " HIGHLIGHT "%ix%i" RESET " crossword with " HIGHLIGHT "%i words" RESET " in: " HIGHLIGHT "%i:%02i:%02i\n\n" RESET
-		, COLUMNS, ROWS, wordBankSize, timeToComplete / 3600, (timeToComplete% 3600) / 60, timeToComplete % 60);
+		, width, height, wordBankSize, timeToComplete / 3600, (timeToComplete% 3600) / 60, timeToComplete % 60);
 	endMenu();
 }
 

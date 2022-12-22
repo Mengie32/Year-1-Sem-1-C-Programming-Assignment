@@ -12,7 +12,36 @@ void toBin(int value) {
 // stes cursor position to given x,y coords
 void setCursorPos(int coords[2]) {
     printf(CURSORHOME);
-    printf(CURSORPOS, coords[1], coords[0]);
+    printf(REDFORE"DEBUG"RESET, coords[1], coords[0]);
+}
+
+void logField() {
+    printf(CURSORHOME);
+    walkCursor(20, 0);
+}
+void answerField() {
+    printf(CURSORHOME);
+    walkCursor(20, 0);
+}
+void wordBankField() {
+    printf(CURSORHOME);
+    walkCursor(20, 0);
+}
+
+void walkCursor(int rows, int columns) {
+    if (columns >= 0) {
+        printf(WALKPX, columns);
+    }
+    else {
+        printf(WALKNX, -columns);
+    }
+
+    if (rows >= 0) {
+        printf(WALKPY, rows);
+    }
+    else {
+        printf(WALKNY, -rows);
+    }
 }
 
 // sets the bit at given position of the given variable to the given value
@@ -33,7 +62,7 @@ int getBit(int binaryValue, int position) {
     return ((mask & binaryValue) >> position);
 }
 
-char puzzle[ROWS][COLUMNS];
+//char puzzle[height][width];
 
 char dictionary[][10] = { "GIRL" , "BOY" , "SHIP" , "CAT" , "FOG" , "KITE" , "BAG" , "STAMP" , "ZOOM" , "JOY", "CAR" , "BUS" , "VAN" , "BOAT" , "BIKE" , "TURBO" , "SCHOOL" , "COVID" , "VIRUS" , "STAR" };
 char wordBank[WORDSTOCHOOSE][10] = {""};
@@ -43,11 +72,25 @@ unsigned int found = 0;
 int dictSize = sizeof(dictionary) / sizeof(dictionary[0]);
 int wordBankSize = WORDSTOCHOOSE;
 
-int ansField[2] = { 19,ROWS + 8 };
-int logField[2] = { 1,ROWS + 11 };
-int wordBankField[2] = { 1,ROWS + 4 };
+//int ansField[2] = { 19,8 };
+//int logField[2] = { 1,11 };
+//int wordBankField[2] = { 1,4 };
 
 int remainingWords;
 
-time_t startTime;
-time_t timeToComplete = 0;
+time_t startTime = 0;
+int timeToComplete = 0;
+
+//new variables
+char* puzzleArray = NULL;
+int width = 10;
+int height = 10;
+int area = 0;
+
+//new Funcs
+
+//provides a convenient way to access the puzzle
+char* puzzleInterface(int row, int column) {
+    int position = (column)+(row * width);
+    return puzzleArray + position;
+}
