@@ -42,7 +42,7 @@ void newPuzzle() {
     remainingWords = wordBankSize;
 }
 
-void game() {
+int game() {
     refresh();
 
     //remainingWords = 0; //used for testing post-game

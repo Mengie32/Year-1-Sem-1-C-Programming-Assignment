@@ -23,7 +23,7 @@ int userInput(int min, int max) {
 	return value;
 }
 
-void mainMenu() {
+int mainMenu() {
 	printf(CLRSCREEN
  "    "HIGHLIGHT BOLD  "  _____  _____    ____    _____  _____ __          __ ____   _____   _____  "RESET"\n"
  "  "HIGHLIGHT BOLD "   / ____||  __ \\  / __ \\  / ____|/ ____|\\ \\        / // __ \\ |  __ \\ |  __ \\   "RESET"\n"
@@ -43,7 +43,7 @@ void mainMenu() {
 	}
 }
 
-void pauseMenu() {
+int pauseMenu() {
 	printf(CLRSCREEN BOLD"\t\tGame Paused\n"RESET);
 	printLine(45);
 	printf("\n\n\t1. Resume Game\n\t2. Main Menu\n\t3. Quit\n\n");
@@ -89,7 +89,7 @@ void pauseMenu() {
 	}
 }
 
-void endMenu() {
+int endMenu() {
 	printLine(60);
 	printf("\n1. New Game\n2. Return to Main Menu\n3. Quit\n");
 	printLine(60);

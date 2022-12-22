@@ -99,7 +99,7 @@ int cardinalDirection() {
 	return !rowDiff ? 0 : rowDiff == colDiff ? 1 : !colDiff ? 2 : -1;
 }
 
-void searchBoard() {
+int searchBoard() {
 	int orientation = cardinalDirection();
 	int* offsets = orientationToOffsets(orientation);
 	int yo = *offsets, xo = *(offsets + 1);
