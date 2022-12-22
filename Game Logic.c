@@ -27,7 +27,7 @@ int isValidInput(char input[11]) {
 	int letter = input[0];
 
 	//test for starting letter
-	binaryWrite(&letter, 5, 0); // ignore case by converting to uppercase
+	setBit(&letter, 5, 0); // ignore case by converting to uppercase
 	if (letter < 65 || letter > 90) {
 		return 0;
 	}
@@ -67,7 +67,7 @@ int  acceptAnswer() {
 		return 0;
 	}
 	//start row no.
-	binaryWrite(token, 5, 0); // ignore case by converting to uppercase
+	setBit(token, 5, 0); // ignore case by converting to uppercase
 	coord[0] = *token - 65;
 	//start column no.
 	token += 1;
@@ -78,7 +78,7 @@ int  acceptAnswer() {
 	if (!isValidInput(token)) {
 		return 0;
 	}
-	binaryWrite(token, 5, 0); // ignore case by converting to uppercase
+	setBit(token, 5, 0); // ignore case by converting to uppercase
 	coord[2] = *token - 65;
 	//end column no.
 	token += 1;
@@ -124,7 +124,7 @@ int searchBoard() {
 			return 0;
 		}
 		letter = puzzle[y][x];
-		binaryWrite(&letter, 5, 0); // remove highlight data from letter
+		setBit(&letter, 5, 0); // remove highlight data from letter
 		word[i] = letter;
 		i++;
 		x += xo;
@@ -144,13 +144,13 @@ int searchBoard() {
 				printf(CLEARFIELD"You already found %s.", word);
 				return 0;
 			}
-			binaryWrite(&found,i,1);
+			setBit(&found,i,1);
 			displayWordBank();
 			x = coord[0];
 			y = coord[1];
 			// highlihght word in puzzle
 			do {
-				binaryWrite(&puzzle[y][x],5,1);
+				setBit(&puzzle[y][x],5,1);
 				x += xo;
 				y += yo;
 			} while (!(x > coord[2] || y > coord[3]));
@@ -168,7 +168,7 @@ int searchBoard() {
 
 void win() {
 	extern time_t startTime;
-	extern time_t timeToComplete;
+	extern int timeToComplete;
 	printf(CLRSCREEN GRNBACK BOLD
 		"  __     __   ____    _    _    __          __  _____   _   _   _   \n"
 		"  \\ \\   / /  / __ \\  | |  | |   \\ \\        / / |_   _| | \\ | | | |  \n"

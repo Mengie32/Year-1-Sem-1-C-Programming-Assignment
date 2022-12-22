@@ -27,12 +27,11 @@
 #include "Globals.h"
 
 extern char puzzle[ROWS][COLUMNS];
-
 extern char dictionary[][10];
-
 extern int remainingWords;
 
 extern time_t startTime;
+extern int timeToComplete;
 
 void newPuzzle() {
     found = 0;

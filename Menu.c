@@ -9,7 +9,7 @@ void printLine(int width) {
 
 //loops until the user enters an integer within the specified range, then returns it.
 int userInput(int min, int max) {
-	char answer[10];
+	char answer[10] = "";
 	int value;
 	printf("\n\n");
 	do {

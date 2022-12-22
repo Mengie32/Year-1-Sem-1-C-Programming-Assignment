@@ -1,7 +1,7 @@
 #include "Definitions.h"
 
 // prints the binary of the given value
-void toBin(int value) {
+void dumpBinary(int value) {
     int i;
     printf("\n");
     for (i = 0; i < sizeof(value)*8; i++) {
@@ -16,7 +16,7 @@ void setCursorPos(int coords[2]) {
 }
 
 // sets the bit at given position of the given variable to the given value
-void binaryWrite(int *binaryValue,int position, int bool) {
+void setBit(int *binaryValue,int position, int bool) {
     unsigned int inverseMask = ~(1 << position);
     if(bool==1||bool==0){
         bool = bool << position;
@@ -49,5 +49,5 @@ int wordBankField[2] = { 1,ROWS + 4 };
 
 int remainingWords;
 
-time_t startTime;
-time_t timeToComplete = 0;
+time_t startTime = 0;
+int timeToComplete = 0;
